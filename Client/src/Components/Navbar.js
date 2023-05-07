@@ -15,52 +15,62 @@ const baseUrl = 'http://localhost:5000';
 const Navbar = () => {
 
   // const name = localStorage.getItem('name');
-  const userName=localStorage.getItem('name')
+  const userName = localStorage.getItem('name')
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const [input,setInput]=useState({
-    questionAdd:'',
-    answerAdd:''
+  const [input, setInput] = useState({
+    questionAdd: '',
+    answerAdd: ''
   })
-  const inputHandler=(e)=>{
-    const {name,value}=e.target
-    setInput({...input,[name]:value})
+  const inputHandler = (e) => {
+    const { name, value } = e.target
+    setInput({ ...input, [name]: value })
   }
-  const formHandler=(e)=>{
+  const formHandler = (e) => {
     e.preventDefault();
-    axios.post(`${baseUrl}/user/question`, input)
-    .then((res) => {
-      if (res.data.createResponse) {
-     
-        toast.success('Question Added successfully', {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          // onClose: () => {
-          //   navigate('/');
-          // }
-        });
-        setIsModalOpen(false)
-        console.log(res.data.createResponse,"res.data.createResponse");
-      } else {
-    
+    if (input.answerAdd == "" || input.questionAdd == "") {
+      toast.error("Please fill all the details", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else {
+      axios.post(`${baseUrl}/user/question`, input)
+        .then((res) => {
+          if (res.data.createResponse) {
 
-        console.log("errorq");
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  
+            toast.success('Question Added successfully', {
+              position: "top-center",
+              autoClose: 600,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+            setIsModalOpen(false)
+            console.log(res.data.createResponse, "res.data.createResponse");
+          } else {
+
+
+            console.log("errorq");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
     setInput({
-      questionAdd:'',
-      answerAdd:''
+      questionAdd: '',
+      answerAdd: ''
     })
   }
   const handleAddQuestionClick = () => {
@@ -116,51 +126,53 @@ const Navbar = () => {
                       &times;
                     </span>
                     <form action="" onSubmit={formHandler}>
-                    <div>
-                    <div className="modal-header">
+                      <div>
+                        <div className="modal-header">
 
-                      <input
-                        type="text"
-                        placeholder="Add Question"
-                        className="form-control"
-                        name="questionAdd"
-                        onChange={inputHandler}
-                        value={input.questionAdd}
-                      />
-                    </div>
-                    <div className="modal-body">
-                      <input
-                        type="text"
-                        placeholder="Add Answer"
-                        className="form-control"
-                        name="answerAdd"
-                        value={input.answerAdd}
-                        onChange={inputHandler}
-                      />
-                    </div>
-                  
-                    <div
-                      className=""
-                      style={{ display: "flex", justifyContent: "row",gap:"10px" }}
-                    >
-                      <button className="btn2" type="submit">Submit</button>
-                      <button className="btn2" onClick={closeModal}>
-                        Cancel
-                      </button>
-                    </div>
-                    </div>
+                          <input
+                            type="text"
+                            placeholder="Add Question"
+                            className="form-control"
+                            name="questionAdd"
+                            onChange={inputHandler}
+                            value={input.questionAdd}
+                          />
+                        </div>
+                        <div className="modal-body">
+                          <input
+                            type="text"
+                            placeholder="Add Answer"
+                            className="form-control"
+                            name="answerAdd"
+                            value={input.answerAdd}
+                            onChange={inputHandler}
+                          />
+                        </div>
+
+                        <div
+                          className=""
+                          style={{ display: "flex", justifyContent: "row", gap: "10px" }}
+                        >
+                          <button className="btn2" type="submit"
+                          // disabled={input.answerAdd == "" || input.questionAdd== ""} 
+                          >Submit</button>
+                          <button className="btn2" onClick={closeModal}>
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                     </form>
-                 
+
                   </div>
-                
+
                 </div>
-              
+
               </Modal>
-             
+
               {isLoggedIn ? (
 
                 <li className="nav-item box">
-                <span>Welcome,{userName}</span>
+                  <span>Welcome,{userName}</span>
                   <button onClick={handleLogout} className="nav-link" title="login out">
                     Log Out
                   </button>
@@ -175,12 +187,12 @@ const Navbar = () => {
             </ul>
           </div>
         </div>
-        
+
       </nav>
       <ToastContainer />
       <Main />
     </>
-   
+
   );
 };
 export default Navbar;

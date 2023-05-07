@@ -33,7 +33,7 @@ const NodejsInterview = ({ title, content }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [])
+  }, [questionsAndAnswers])
 
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
